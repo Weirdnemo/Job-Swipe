@@ -18,6 +18,16 @@ class Profile(BaseModel):
     company_description: str = None
     location: str
 
+class Job(BaseModel):
+    title: str
+    description: str
+    location: str
+    skills_required: list[str] = []
+    salary_range: str = None
+    posted_by: str
+
+jobs_db = {}
+
 @app.get("/")
 def home():
     return {"message": "Welcome to Seekr! how are you toady!!"}
@@ -47,3 +57,15 @@ def update_profile(email: str, profile: Profile):
         raise HTTPException(status_code=404, detail="Email not registered")
     users_db[email]["Profile"] = Profile.dict()
     return {"message": "Profile updated!"}
+
+@app.post("/post_job")
+def post_job(job: Job):
+    if job.posted_by not in users_db:
+        raise HTTPException(status_code=404, detail="Recruiter not registered")
+
+    if users_db[job.posted_by]["role"] != "recruiter":
+        raise HTTPException(status_code=401, detail="Only recruiters can post jobs")
+
+    job_id = len(jobs_db) + 1
+    jobs_db[job_id] = job.dict()
+    return {"message": "Job posted!", "job_id": job_id}
