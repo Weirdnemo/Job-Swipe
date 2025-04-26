@@ -12,6 +12,15 @@ class User(BaseModel):
     password: str
     role: str
 
+class SignupUser(BaseModel):
+    email: str
+    password: str
+    role: str
+
+class LoginUser(BaseModel):
+    email: str
+    password: str
+
 class Profile(BaseModel):
     name: str
     bio: str = None
@@ -30,7 +39,7 @@ class Job(BaseModel):
 
 class SwipeAction(BaseModel):
     email: str
-    job_id: str
+    job_id: int
     action: str #like or skip action
 
 
@@ -39,17 +48,17 @@ def home():
     return {"message": "Welcome to Seekr! how are you toady!!"}
 
 @app.post("/signup")
-def signup(user: User):
+def signup(user: SignupUser):
     if user.email in users_db:
-        raise HTTPException(status_code=400, detail="Email already registered")
+        raise HTTPException(status_code=400, detail="Email already registered.")
     users_db[user.email] = {
         "password": user.password,
         "role": user.role
     }
-    return {"message": "User registered!"}
+    return {"message": "User created successfully!"}
 
 @app.post("/login")
-def login(user: User):
+def login(user: LoginUser):
     if user.email not in users_db or users_db[user.email]["password"] != user.password:
         raise HTTPException(status_code=401, detail="Incorrect email or password.")
     return {
@@ -57,11 +66,12 @@ def login(user: User):
         "role": users_db[user.email]["role"]
     }
 
+
 @app.post("/update_profile")
 def update_profile(email: str, profile: Profile):
     if email not in users_db:
         raise HTTPException(status_code=404, detail="Email not registered")
-    users_db[email]["Profile"] = Profile.dict()
+    users_db[email]["Profile"] = profile.model_dump()
     return {"message": "Profile updated!"}
 
 @app.post("/post_job")
@@ -73,32 +83,35 @@ def post_job(job: Job):
         raise HTTPException(status_code=403, detail="Only recruiters can post jobs")
 
     job_id = len(jobs_db) + 1
-    jobs_db[job_id] = job.dict()
+    jobs_db[job_id] = job.model_dump()
     return {"message": "Job posted!", "job_id": job_id}
 
 @app.get("/list_jobs")
 def list_jobs():
     return jobs_db
 
-@app.post("/Swipe_job")
+
+@app.post("/swipe_job")
 def swipe_job(action: SwipeAction):
     if action.email not in users_db:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="User not found.")
 
     if users_db[action.email]["role"] != "job_seeker":
-        raise HTTPException(status_code=403, detail="Only job seekers can swipe jobs")
+        raise HTTPException(status_code=403, detail="Only job seekers can swipe.")
 
     if action.job_id not in jobs_db:
-        raise HTTPException(status_code=404, detail="Job not found")
+        raise HTTPException(status_code=404, detail="Job not found.")
 
     if action.email not in likes_db:
         likes_db[action.email] = {"liked": [], "skipped": []}
 
     if action.action == "like":
         likes_db[action.email]["liked"].append(action.job_id)
+        action_word = "liked"
     elif action.action == "skip":
         likes_db[action.email]["skipped"].append(action.job_id)
+        action_word = "skipped"
     else:
         raise HTTPException(status_code=400, detail="Action must be 'like' or 'skip'.")
 
-    return {"message": f"Job {action.action}d successfully."}
+    return {"message": f"Job {action_word} successfully."}
