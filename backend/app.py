@@ -4,6 +4,8 @@ from pydantic import BaseModel
 app = FastAPI()
 
 users_db = {}
+jobs_db = {}
+likes_db = {}
 
 class User(BaseModel):
     email: str
@@ -26,9 +28,13 @@ class Job(BaseModel):
     salary_range: str = None
     posted_by: str
 
-jobs_db = {}
+class SwipeAction(BaseModel):
+    email: str
+    job_id: str
+    action: str #like or skip action
 
-@app.get("/")
+
+@app.get("/Welcome")
 def home():
     return {"message": "Welcome to Seekr! how are you toady!!"}
 
@@ -64,8 +70,35 @@ def post_job(job: Job):
         raise HTTPException(status_code=404, detail="Recruiter not registered")
 
     if users_db[job.posted_by]["role"] != "recruiter":
-        raise HTTPException(status_code=401, detail="Only recruiters can post jobs")
+        raise HTTPException(status_code=403, detail="Only recruiters can post jobs")
 
     job_id = len(jobs_db) + 1
     jobs_db[job_id] = job.dict()
     return {"message": "Job posted!", "job_id": job_id}
+
+@app.get("/list_jobs")
+def list_jobs():
+    return jobs_db
+
+@app.post("/Swipe_job")
+def swipe_job(action: SwipeAction):
+    if action.email not in users_db:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if users_db[action.email]["role"] != "job_seeker":
+        raise HTTPException(status_code=403, detail="Only job seekers can swipe jobs")
+
+    if action.job_id not in jobs_db:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    if action.email not in likes_db:
+        likes_db[action.email] = {"liked": [], "skipped": []}
+
+    if action.action == "like":
+        likes_db[action.email]["liked"].append(action.job_id)
+    elif action.action == "skip":
+        likes_db[action.email]["skipped"].append(action.job_id)
+    else:
+        raise HTTPException(status_code=400, detail="Action must be 'like' or 'skip'.")
+
+    return {"message": f"Job {action.action}d successfully."}
