@@ -115,3 +115,6 @@ def swipe_job(action: SwipeAction):
         raise HTTPException(status_code=400, detail="Action must be 'like' or 'skip'.")
 
     return {"message": f"Job {action_word} successfully."}
+
+#TODO we need to add some simple frontend for visualizing the changes and stuff like that. also i need to add filtering of jobs based on the skill set.
+#TODO remove skills option from the bio page and add a selection of skills which user can select. this will streamline the filtering.
