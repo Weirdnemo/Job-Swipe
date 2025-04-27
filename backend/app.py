@@ -1,7 +1,16 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 users_db = {}
 jobs_db = {}
@@ -115,6 +124,23 @@ def swipe_job(action: SwipeAction):
         raise HTTPException(status_code=400, detail="Action must be 'like' or 'skip'.")
 
     return {"message": f"Job {action_word} successfully."}
+
+
+@app.get("/liked_jobs")
+def liked_jobs(email: str):
+    if email not in users_db:
+        raise HTTPException(status_code=404, detail="User not found.")
+
+    if users_db[email]["role"] != "job_seeker":
+        raise HTTPException(status_code=403, detail="Only job seekers can like.")
+
+    if email not in likes_db or not likes_db[email]["liked"]:
+        return {"message": "No liked jobs found"}
+
+    liked_job_ids = likes_db[email]["liked"]
+    liked_jobs_list = [jobs_db[job_id] for job_id in liked_job_ids if job_id in jobs_db]
+
+    return {"liked_jobs": liked_jobs_list}
 
 #TODO we need to add some simple frontend for visualizing the changes and stuff like that. also i need to add filtering of jobs based on the skill set.
 #TODO remove skills option from the bio page and add a selection of skills which user can select. this will streamline the filtering.

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seekr Frontend</title>
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <h1>Seekr - Simple Frontend</h1>
+
+    <h2>Signup</h2>
+    <form id="signupForm">
+        <input type="email" placeholder="Email" id="signupEmail" required>
+        <input type="password" placeholder="Password" id="signupPassword" required>
+        <select id="signupRole">
+            <option value="job_seeker">Job Seeker</option>
+            <option value="recruiter">Recruiter</option>
+        </select>
+        <button type="submit">Signup</button>
+    </form>
+
+    <h2>Login</h2>
+    <form id="loginForm">
+        <input type="email" placeholder="Email" id="loginEmail" required>
+        <input type="password" placeholder="Password" id="loginPassword" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <h2>Update Profile</h2>
+    <form id="profileForm">
+        <input type="email" placeholder="Email" id="profileEmail" required>
+        <input type="text" placeholder="Name" id="profileName" required>
+        <input type="text" placeholder="Bio" id="profileBio">
+        <input type="text" placeholder="Skills (comma separated)" id="profileSkills">
+        <input type="text" placeholder="Company Name" id="profileCompany">
+        <input type="text" placeholder="Company Description" id="profileCompanyDesc">
+        <input type="text" placeholder="Location" id="profileLocation" required>
+        <button type="submit">Update Profile</button>
+    </form>
+
+    <h2>Post Job</h2>
+    <form id="postJobForm">
+        <input type="text" placeholder="Title" id="jobTitle" required>
+        <input type="text" placeholder="Description" id="jobDescription" required>
+        <input type="text" placeholder="Location" id="jobLocation" required>
+        <input type="text" placeholder="Skills Required (comma separated)" id="jobSkills">
+        <input type="text" placeholder="Salary Range" id="jobSalary">
+        <input type="email" placeholder="Posted By Email" id="jobPostedBy" required>
+        <button type="submit">Post Job</button>
+    </form>
+
+    <h2>Swipe Job</h2>
+    <form id="swipeForm">
+        <input type="email" placeholder="Email" id="swipeEmail" required>
+        <input type="number" placeholder="Job ID" id="swipeJobId" required>
+        <select id="swipeAction">
+            <option value="like">Like</option>
+            <option value="skip">Skip</option>
+        </select>
+        <button type="submit">Swipe</button>
+    </form>
+
+    <h2>View Liked Jobs</h2>
+    <input type="email" placeholder="Email" id="likedEmail">
+    <button onclick="viewLikedJobs()">View Liked Jobs</button>
+
+    <h2>Response:</h2>
+    <pre id="responseArea"></pre>
+
+</body>
+</html>
