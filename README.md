@@ -1,3 +1,6 @@
+![App Screenshot](Job Swipe_ Apply with a Swipe.png)
+
+
 # 💼 Job Swipe — A Smarter Way to Swipe Into Your Next Job
 
 **Job Tinder** is a fast, AI-powered job-matching platform that reimagines the job hunt as a swipe-based experience.  
