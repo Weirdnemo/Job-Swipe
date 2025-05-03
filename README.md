@@ -1,11 +1,11 @@
-# 💼 Job Tinder — A Smarter Way to Swipe Into Your Next Job
+# 💼 Job Swipe — A Smarter Way to Swipe Into Your Next Job
 
 **Job Tinder** is a fast, AI-powered job-matching platform that reimagines the job hunt as a swipe-based experience.  
 Think Tinder — but for jobs — and way more useful.
 
 ---
 
-## 🚀 What is Job Tinder?
+## 🚀 What is Job Swipe?
 
 Job Tinder bridges the gap between traditional job portals and the short attention span of modern users.
 
@@ -37,7 +37,7 @@ No server hassle. Just smooth performance and data you can trust.
 
 ---
 
-## ✨ Why Job Tinder?
+## ✨ Why Job Swipe?
 
 - 📱 **Swipe UI**: Fast, intuitive, and fun to use
 - 🧠 **AI-enhanced**: No more reading 500-word job posts
