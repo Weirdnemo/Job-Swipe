@@ -1,4 +1,4 @@
-![App Screenshot](Job Swipe_ Apply with a Swipe.png)
+![App Screenshot](https://github.com/Weirdnemo/Job-Swipe/blob/master/Job%20Swipe_%20Apply%20with%20a%20Swipe.png)
 
 
 # 💼 Job Swipe — A Smarter Way to Swipe Into Your Next Job
